@@ -50,7 +50,6 @@ if (localStorage.userActive) {
         msg: msgSendInput.value.trim(),
         date: moment().format("LT") + " " + moment().format("L"),
       };
-      chat.newMessage(msg);
       ws.send(JSON.stringify(msg));
       msgSendInput.value = "";
     }
