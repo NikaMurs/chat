@@ -41,7 +41,7 @@ const wsServer = new WS.Server({
 wsServer.on("connection", (ws) => {
   ws.on("message", (msg) => {
     const eventData = JSON.stringify(JSON.parse(msg));
-    chat.newMessage(eventData)    
+    chat.newMessage(msg)    
     Array.from(wsServer.clients)
       .filter((client) => client.readyState === WS.OPEN)
       .forEach((client) => client.send(eventData));
