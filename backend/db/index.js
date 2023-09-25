@@ -32,8 +32,6 @@ const chat = {
   },
 
   newMessage(msg) {
-    console.log(this.users);
-
     this.chat.push(msg);
   },
 
