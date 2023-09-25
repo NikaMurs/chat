@@ -20,6 +20,7 @@ const chat = {
   users: ["Oleg", "Ivan"],
 
   newUser(user) {
+    if (user === null) return;
     this.users.push(user);
   },
 

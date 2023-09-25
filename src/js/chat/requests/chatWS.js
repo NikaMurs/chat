@@ -109,6 +109,7 @@ function newMsg(msg) {
     </div>
     `
   );
+  document.querySelector(".chatMsgsWrapper").scrollTop = 9999;
 }
 
 function newUser(user) {

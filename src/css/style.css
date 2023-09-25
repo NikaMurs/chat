@@ -115,6 +115,7 @@ body, input, textarea, button{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow-y:scroll
 }
 
 .chatMsg{
@@ -143,6 +144,7 @@ body, input, textarea, button{
 }
 
 .msgSend{
+    position:sticky;
     display: flex;
     justify-content: space-between;
     width: 100%;
