@@ -11,7 +11,14 @@ if (localStorage.userActive) {
   const msgSend = chat.querySelector(".msgSend");
   const moment = require("moment");
 
-  const ws = new WebSocket("wss://chatbackend-nl2s.onrender.com/ws");
+  const ws = new WebSocket("ws://localhost:7070/ws");
+
+  ws.addEventListener('open', ()=>{
+    const obj = {
+      newUser: localStorage.userActive
+    }
+    ws.send(JSON.stringify(obj));
+  })
 
   ws.addEventListener("message", (e) => {
     const data = JSON.parse(e.data);
@@ -33,8 +40,21 @@ if (localStorage.userActive) {
     }
 
     if (data.oldUser) {
-      chatUsers.querySelector(`#${data.oldUser}`).remove();
+      try {
+        chatUsers.querySelector(`#${data.oldUser}`).remove();
+      } catch (error) {
+        console.log(error)
+      }
       isDone = true;
+    }
+
+    if(data.newUser){
+      isDone = true;
+      if (data.newUser != localStorage.userActive){
+        if (!chatUsers.querySelector(`#${data.newUser}`)){
+          newUser(data.newUser)
+        }
+      }
     }
 
     if (!isDone) {
