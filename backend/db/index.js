@@ -20,7 +20,7 @@ const chat = {
   users: ["Oleg", "Ivan"],
 
   newUser(user) {
-    if (user === null) return;
+    if (user === undefined) return;
     this.users.push(user);
   },
 
@@ -32,6 +32,8 @@ const chat = {
   },
 
   newMessage(msg) {
+    console.log(this.users);
+
     this.chat.push(msg);
   },
 
