@@ -11,8 +11,8 @@ if (localStorage.userActive) {
   const msgSend = chat.querySelector(".msgSend");
   const moment = require("moment");
 
-  //const ws = new WebSocket("wss://chatbackend-nl2s.onrender.com/ws");
-  const ws = new WebSocket("ws://localhost:7070/ws");
+  const ws = new WebSocket("wss://chatbackend-nl2s.onrender.com/ws");
+  //const ws = new WebSocket("ws://localhost:7070/ws");
 
   ws.addEventListener("open", () => {
     const obj = {
