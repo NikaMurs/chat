@@ -11,18 +11,17 @@ if (localStorage.userActive) {
   const msgSend = chat.querySelector(".msgSend");
   const moment = require("moment");
 
-  const ws = new WebSocket("ws://localhost:7070/ws");
+  const ws = new WebSocket("wss://chatbackend-nl2s.onrender.com/ws");
 
-  ws.addEventListener('open', ()=>{
+  ws.addEventListener("open", () => {
     const obj = {
-      newUser: localStorage.userActive
-    }
+      newUser: localStorage.userActive,
+    };
     ws.send(JSON.stringify(obj));
-  })
+  });
 
   ws.addEventListener("message", (e) => {
     const data = JSON.parse(e.data);
-    console.log(data);
     let isDone = false;
 
     if (Array.isArray(data)) {
@@ -43,16 +42,16 @@ if (localStorage.userActive) {
       try {
         chatUsers.querySelector(`#${data.oldUser}`).remove();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
       isDone = true;
     }
 
-    if(data.newUser){
+    if (data.newUser) {
       isDone = true;
-      if (data.newUser != localStorage.userActive){
-        if (!chatUsers.querySelector(`#${data.newUser}`)){
-          newUser(data.newUser)
+      if (data.newUser != localStorage.userActive) {
+        if (!chatUsers.querySelector(`#${data.newUser}`)) {
+          newUser(data.newUser);
         }
       }
     }
@@ -84,6 +83,13 @@ if (localStorage.userActive) {
     delete localStorage.userActive;
     location.reload();
   });
+
+  window.addEventListener("beforeunload", () => {
+    const reason = {
+      user: localStorage.userActive,
+    };
+    ws.close(1000, JSON.stringify(reason));
+  });
 }
 
 function newMsg(msg) {
@@ -106,17 +112,11 @@ function newMsg(msg) {
 }
 
 function newUser(user) {
-  let userClass;
-  if (user == localStorage.userActive) {
-    userClass = "chatUser chatUserYou";
-    user = "You";
-  } else {
-    userClass = "chatUser";
-  }
+  if (localStorage.userActive == user) return;
   document.querySelector(".chatUsers").insertAdjacentHTML(
     "beforeend",
     `
-    <div class="${userClass}" id="${user}">${user}</div>
+    <div class="chatUser" id="${user}">${user}</div>
     `
   );
 }
@@ -127,6 +127,7 @@ function chatHTML() {
     <div class="chatWrapper">
       <div class="chat">
         <div class="chatUsers">
+          <div class="chatUser chatUserYou" id="${localStorage.userActive}">You</div>
         </div>
         <div class="chatMsgsWrapper">
           <div class="chatMsgs">

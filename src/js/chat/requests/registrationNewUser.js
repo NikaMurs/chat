@@ -1,6 +1,6 @@
 export default async function registrationNewUser(user) {
   const response = await fetch(
-    "http://localhost:7070" + "/registrationNewUser",
+    "https://chatbackend-nl2s.onrender.com" + "/registrationNewUser",
     {
       method: "POST",
       headers: {

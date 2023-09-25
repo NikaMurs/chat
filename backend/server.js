@@ -41,16 +41,20 @@ const wsServer = new WS.Server({
 wsServer.on("connection", (ws) => {
   ws.on("message", (msg) => {
     const eventData = JSON.parse(msg);
-    if (!eventData.newUser){
+    if (!eventData.newUser) {
       chat.newMessage(JSON.parse(msg));
     }
+    if (!chat.users.includes(eventData.newUser)) {
+      chat.newUser(eventData.newUser);
+    }
+
     Array.from(wsServer.clients)
       .filter((client) => client.readyState === WS.OPEN)
       .forEach((client) => client.send(JSON.stringify(eventData)));
   });
 
-  ws.send(JSON.stringify(chat.chat));
   ws.send(JSON.stringify(chat.activeUsers()));
+  ws.send(JSON.stringify(chat.chat));
 
   ws.on("close", (code, reason) => {
     if (code == 1000) {
