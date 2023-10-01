@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import "moment/locale/ru";
 
-if (localStorage.userActive) {
+if (sessionStorage.userActive) {
   const container = document.querySelector(".container");
   container.insertAdjacentHTML("beforeend", chatHTML());
 
@@ -16,7 +16,7 @@ if (localStorage.userActive) {
 
   ws.addEventListener("open", () => {
     const obj = {
-      newUser: localStorage.userActive,
+      newUser: sessionStorage.userActive,
     };
     ws.send(JSON.stringify(obj));
   });
@@ -50,7 +50,7 @@ if (localStorage.userActive) {
 
     if (data.newUser) {
       isDone = true;
-      if (data.newUser != localStorage.userActive) {
+      if (data.newUser != sessionStorage.userActive) {
         if (!chatUsers.querySelector(`#${data.newUser}`)) {
           newUser(data.newUser);
         }
@@ -66,7 +66,7 @@ if (localStorage.userActive) {
     e.preventDefault();
     if (msgSendInput.value.trim()) {
       const msg = {
-        sender: localStorage.getItem("userActive"),
+        sender: sessionStorage.getItem("userActive"),
         msg: msgSendInput.value.trim(),
         date: moment().format("LT") + " " + moment().format("L"),
       };
@@ -78,16 +78,16 @@ if (localStorage.userActive) {
   const buttonExit = document.querySelector(".buttonExit");
   buttonExit.addEventListener("click", () => {
     const reason = {
-      user: localStorage.userActive,
+      user: sessionStorage.userActive,
     };
     ws.close(1000, JSON.stringify(reason));
-    delete localStorage.userActive;
+    delete sessionStorage.userActive;
     location.reload();
   });
 
   window.addEventListener("beforeunload", () => {
     const reason = {
-      user: localStorage.userActive,
+      user: sessionStorage.userActive,
     };
     ws.close(1000, JSON.stringify(reason));
   });
@@ -95,7 +95,7 @@ if (localStorage.userActive) {
 
 function newMsg(msg) {
   let chatClass;
-  if (msg.sender == localStorage.userActive) {
+  if (msg.sender == sessionStorage.userActive) {
     chatClass = "chatMsg chatMsgYou";
     msg.sender = "You";
   } else {
@@ -114,7 +114,7 @@ function newMsg(msg) {
 }
 
 function newUser(user) {
-  if (localStorage.userActive == user) return;
+  if (sessionStorage.userActive == user) return;
   document.querySelector(".chatUsers").insertAdjacentHTML(
     "beforeend",
     `
@@ -129,7 +129,7 @@ function chatHTML() {
     <div class="chatWrapper">
       <div class="chat">
         <div class="chatUsers">
-          <div class="chatUser chatUserYou" id="${localStorage.userActive}">You</div>
+          <div class="chatUser chatUserYou" id="${sessionStorage.userActive}">You</div>
         </div>
         <div class="chatMsgsWrapper">
           <div class="chatMsgs">

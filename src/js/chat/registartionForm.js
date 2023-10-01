@@ -4,7 +4,7 @@ const registrationButton = registration.querySelector(".registrationButton");
 
 import registrationNewUser from "./requests/registrationNewUser.js";
 
-if (localStorage.userActive) {
+if (sessionStorage.userActive) {
   registration.remove();
 } else {
   registrationButton.addEventListener("click", async (e) => {
@@ -15,7 +15,7 @@ if (localStorage.userActive) {
       };
       const res = await registrationNewUser(user);
       if (res.status == 200) {
-        localStorage.setItem("userActive", user.userNick);
+        sessionStorage.setItem("userActive", user.userNick);
         location.reload();
       } else {
         registrationInput.value = "";
